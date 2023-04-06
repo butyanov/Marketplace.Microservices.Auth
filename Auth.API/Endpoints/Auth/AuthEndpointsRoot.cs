@@ -2,9 +2,9 @@
 
 public class AuthEndpointsRoot : IEndpointsRoot
 {
-    public void MapEndpoints(IEndpointRouteBuilder endpoints)
+    public void MapEndpoints(WebApplication app)
     {
-        var group = endpoints.MapGroup("/auth")
+        var group = (IEndpointRouteBuilder)app.MapGroup($"/auth/v{app.Configuration["ApiData:Version"]}")
             .WithTags("Авторизация");
         group
             .AddEndpoints<AuthEndpoints>();

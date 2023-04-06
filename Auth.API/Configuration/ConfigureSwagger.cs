@@ -4,13 +4,13 @@ namespace Auth.API.Configuration;
 
 public static class ConfigureSwagger
 {
-    public static IServiceCollection AddCustomSwaggerConfiguration(this IServiceCollection services)
+    public static IServiceCollection AddCustomSwaggerConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { 
+            c.SwaggerDoc($"v{configuration["ApiData:Version"]}", new OpenApiInfo { 
                 Title = "My API", 
-                Version = "v1" 
+                Version = $"v{configuration["ApiData:Version"]}" 
             });
             c.AddSecurityDefinition(
                 "bearerAuth",
@@ -28,10 +28,10 @@ public static class ConfigureSwagger
                         Reference = new OpenApiReference 
                         { 
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer" 
+                            Id = "bearerAuth" 
                         } 
                     },
-                    new string[] { } 
+                    Array.Empty<string>()
                 } 
             });
         });

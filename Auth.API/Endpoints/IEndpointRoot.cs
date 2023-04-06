@@ -2,5 +2,5 @@
 
 public interface IEndpointsRoot
 {
-    public void MapEndpoints(IEndpointRouteBuilder endpoints);
+    public void MapEndpoints(WebApplication endpoints);
 }

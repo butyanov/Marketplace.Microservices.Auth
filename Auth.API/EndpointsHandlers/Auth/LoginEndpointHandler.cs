@@ -22,11 +22,11 @@ public class LoginEndpointHandler : IEndpointHandler<AuthorizationRequest, Autho
             await (
                 request.LoginMode switch
                 {
-                    LoginMode.Phone => _authService.HandleTicketLogin(
+                    LoginMode.Phone => _authService.ProcessTicketLogin(
                         request.PhoneTicket
                         ?? throw new ValidationFailedException(nameof(request.PhoneTicket), "TICKET_IS_NULL")),
 
-                    LoginMode.Password => _authService.HandlePasswordLogin(
+                    LoginMode.Password => _authService.ProcessPasswordLogin(
                         request.Email
                         ?? throw new ValidationFailedException(nameof(request.Email), "EMAIL_IS_NULL"),
                         request.Password

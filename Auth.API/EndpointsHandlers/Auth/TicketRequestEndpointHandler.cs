@@ -35,7 +35,7 @@ public class TicketRequestEndpointHandler : IEndpointHandler<TicketRequest, Tick
 
         var code = _verificationCodeGeneratorService.GetVerificationCode(request.Credentials);
         if (request.Type == TicketTypes.Email)
-            await _senderService.SendAsync(request.Credentials, code, null);
+            await _senderService.SendAsync(request.Credentials, code);
 
         var expiresAt = TimeSpan.FromSeconds(AuthConfig.TicketRequestLifetime);
         var nextRequestAt = DateTime.UtcNow.AddSeconds(AuthConfig.TicketCooldown);

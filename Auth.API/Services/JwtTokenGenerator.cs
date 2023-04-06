@@ -33,13 +33,14 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     public string GenerateFromClaims(IEnumerable<Claim> claims, DateTime expiresAt)
     {
-        //TODO Config + ECDSA
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims.ToArray()),
             Expires = expiresAt,
             SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration.GetValue<string>("Jwt:Key")!)), SecurityAlgorithms.HmacSha256Signature)
+                new SigningCredentials(new SymmetricSecurityKey(
+                    Encoding.ASCII.GetBytes(_configuration.GetValue<string>("Jwt:Key")!)),
+                    SecurityAlgorithms.HmacSha256Signature)
         };
         var token = _jwtSecurityTokenHandler.CreateToken(tokenDescriptor);
         return _jwtSecurityTokenHandler.WriteToken(token);
@@ -47,7 +48,6 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     public string GenerateToken<T>(T data, DateTime expiresAt)
     {
-        //TODO Config + ECDSA
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]

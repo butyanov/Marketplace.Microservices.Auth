@@ -22,7 +22,7 @@ services.AddCustomEntitiesConfiguration();
 services
     .AddCustomServicesConfiguration()
     .AddRedisConfiguration(builder.Configuration)
-    .AddCustomSwaggerConfiguration()
+    .AddCustomSwaggerConfiguration(builder.Configuration)
     .AddCustomAuthentication(builder.Configuration)
     .AddCustomAuthorization()
     .AddCustomValidation()
@@ -45,11 +45,3 @@ foreach (var endpointsRoot in app.Services.GetServices<IEndpointsRoot>())
     endpointsRoot.MapEndpoints(app);
 
 app.Run();
-
-//TODO: Настроить UserSecrets
-//TODO: Реализовать подтверждение по Email при регистрации, восстановление доступа к аккаунту через Email
-//TODO: Поместить в UserSecrets всю использующуюся в dev-версии сайта инфу (ключи, пароли от почты...)
-
-
-
-

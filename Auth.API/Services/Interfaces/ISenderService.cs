@@ -2,5 +2,5 @@
 
 public interface ISenderService
 {
-    public Task SendAsync(string email, string code, string? subject);
+    public Task SendAsync(string email, string code, string? subject = "Verification Code");
 }

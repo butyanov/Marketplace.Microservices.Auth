@@ -69,6 +69,24 @@ namespace Auth.API {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FORBIDDEN.
+        /// </summary>
+        public static string ForbiddenError {
+            get {
+                return ResourceManager.GetString("ForbiddenError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BAD_REQUEST.
+        /// </summary>
+        public static string BadRequestError {
+            get {
+                return ResourceManager.GetString("BadRequestError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NOT_FOUND.
         /// </summary>
         public static string NotFoundError {

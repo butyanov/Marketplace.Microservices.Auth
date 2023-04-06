@@ -38,7 +38,7 @@ public class AuthenticationService
         return new AuthenticationResult(token, refreshToken);
     }
     
-    public async Task<AuthenticationResult> HandlePasswordLogin(string email, string password)
+    public async Task<AuthenticationResult> ProcessPasswordLogin(string email, string password)
     {
         var identityUser = await _userManager.FindByEmailAsync(email)
                            ?? throw new NotFoundException<ApplicationUser>();
@@ -54,7 +54,7 @@ public class AuthenticationService
         return AuthenticateUser(identityUser, domainUser);
     }
     
-    public async Task<AuthenticationResult> HandleTicketLogin(string ticket)
+    public async Task<AuthenticationResult> ProcessTicketLogin(string ticket)
     {
         var ticketInfo = _jwtTokenGenerator.ReadPhoneTicketRequest(ticket)
                          ?? throw new UnauthorizedException("TICKET_INVALID");

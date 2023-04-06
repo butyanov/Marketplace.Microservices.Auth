@@ -22,7 +22,7 @@ public class UserPermissionsRequirementHandler : AuthorizationHandler<UserPermis
         {
             if(!IsPermitted(requirement.Permissions,
                    (UserPermissions)byte.Parse(context.User.Claims.First(c => c.Type == "Permissions").Value)))
-                throw new UnauthorizedException("FORBIDDEN");
+                throw new ForbiddenException("FORBIDDEN");
             context.Succeed(requirement);
         }
         else

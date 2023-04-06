@@ -27,9 +27,5 @@ public class AuthEndpoints : IEndpoints
             async (EmailLoginOrRegisterTicketRequest request, LoginOrRegisterTicketEndpointHandler handler) =>
                 Results.Ok(await handler.Handle(EmailLoginOrRegisterTicketRequest.FromTicketRequest(request))))
             .AddValidation(c => c.AddFor<EmailLoginOrRegisterTicketRequest>());
-        
-        endpoints.MapPost("/verify-auth-ticket",
-            async (AcquireTicketRequest request, AcquireTicketEndpointHandler handler) =>
-                Results.Ok(await handler.Handle(request)));
     }
 }
