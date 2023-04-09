@@ -17,16 +17,12 @@ public class UserPermissionsRequirementHandler : AuthorizationHandler<UserPermis
         UserPermissionsRequirement requirement)
     {
         if (!context.User.Identity!.IsAuthenticated)
-            throw new UnauthorizedException("UNAUTHORIZED_ACCESS");
-        if (context.User.HasClaim(c => c.Type == "Permissions"))
-        {
-            if(!IsPermitted(requirement.Permissions,
-                   (UserPermissions)byte.Parse(context.User.Claims.First(c => c.Type == "Permissions").Value)))
-                throw new ForbiddenException("FORBIDDEN");
-            context.Succeed(requirement);
-        }
-        else
-            throw new UnauthorizedException("UNAUTHORIZED_ACCESS");
+            throw new UnauthorizedException("UNAUTHENTICATED_USER");
+       
+        if(!IsPermitted(requirement.Permissions, (UserPermissions)byte.Parse(context.User.Claims.First(c => c.Type == "Permissions").Value)))
+            throw new UnauthorizedAccessException();
+        
+        context.Succeed(requirement);
     }
 
     private bool IsPermitted(UserPermissions requiredPermissions, UserPermissions userPermissions) =>

@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
 using Auth.API.Data;
 using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos;
+using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Exceptions;
 using Auth.API.Models;
@@ -12,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
-public class RefreshTokenEndpointHandler : IEndpointHandler<RefreshTokenRequest, RefreshTokenResponse>
+public class RefreshTokenEndpointHandler : IRequestResponseEndpointHandler<RefreshTokenRequest, RefreshTokenResponse>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly AuthDbContext _context;

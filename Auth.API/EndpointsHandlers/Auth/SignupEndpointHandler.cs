@@ -1,7 +1,10 @@
 ﻿using Auth.API.Data.Interfaces;
 using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos;
+using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.Dto.SupportTypes;
+using Auth.API.Dto.SupportTypes.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Exceptions;
 using Auth.API.Models;
@@ -15,7 +18,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
-public class SignupEndpointHandler : IEndpointHandler<SignupRequest, AuthorizationResponse>
+public class SignupEndpointHandler : IRequestResponseEndpointHandler<SignupRequest, AuthorizationResponse>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IDomainDbContext _dbContext;
@@ -65,7 +68,7 @@ public class SignupEndpointHandler : IEndpointHandler<SignupRequest, Authorizati
         var domainUser = _mapper.Map<ApplicationUser, DomainUser>(identityUser);
         domainUser.IdentityUserId = identityUser.Id;
         domainUser.Name = request.Name;
-        identityUser.UserName = $"{TextConverter.ConvertToLatin(domainUser.Name.Replace(" ", string.Empty))}{new Random().Next(1000, 999999)}";
+        identityUser.UserName = $"{TextConverter.ConvertToLatin(domainUser.Name)}{new Random().Next(1000, 999999)}";
         
         switch (ticket.Type)
         {

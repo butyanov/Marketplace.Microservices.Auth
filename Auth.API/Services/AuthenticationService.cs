@@ -1,7 +1,7 @@
 ﻿using Auth.API.Data.Interfaces;
+using Auth.API.Dto.SupportTypes.Auth;
 using Auth.API.Exceptions;
 using Auth.API.Models;
-using Auth.API.Models.SupportTypes;
 using Auth.API.Services.Extensions;
 using Auth.API.Services.Interfaces;
 using Auth.API.Services.SupportTypes;

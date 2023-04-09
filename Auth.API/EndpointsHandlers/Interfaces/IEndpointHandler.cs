@@ -1,6 +1,6 @@
 ﻿namespace Auth.API.EndpointsHandlers.Interfaces;
 
-public interface IEndpointHandler<TReq, TRes>
+public interface IEndpointHandler
 {
-    public Task<TRes> Handle(TReq request);
+    public Task Handle();
 }

@@ -82,15 +82,15 @@ public class ExceptionHandlingMiddleware
         details.Add("traceId", context.TraceIdentifier);
         GetLogger(context).Log(logLevel, exception, errorText, details);
         
+        context.Response.StatusCode = (int)responseCode;
+        context.Response.ContentType = "application/json";
+        
         if (exception is DomainException ex)
         {
             await WriteDomainError(context, ex);
             return;
         }
-
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)responseCode;
-
+        
         var response = new ProblemDetails
         {
             Title = errorText,

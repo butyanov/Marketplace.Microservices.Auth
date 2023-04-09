@@ -1,5 +1,7 @@
 ﻿using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos;
+using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Models;
 using Auth.API.Services.SupportTypes;
@@ -8,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
-public class LoginOrRegisterTicketEndpointHandler : IEndpointHandler<LoginOrRegisterTicketRequest, TicketResponse>
+public class LoginOrRegisterTicketEndpointHandler : IRequestResponseEndpointHandler<LoginOrRegisterTicketRequest, TicketResponse>
 {
-    private readonly IEndpointHandler<TicketRequest, TicketResponse> _ticketHandler;
+    private readonly IRequestResponseEndpointHandler<TicketRequest, TicketResponse> _ticketHandler;
     private readonly UserManager<ApplicationUser> _userManager;
 
     public LoginOrRegisterTicketEndpointHandler(
-        IEndpointHandler<TicketRequest, TicketResponse> ticketHandler,
+        IRequestResponseEndpointHandler<TicketRequest, TicketResponse> ticketHandler,
         UserManager<ApplicationUser> userManager)
     {
         _ticketHandler = ticketHandler;

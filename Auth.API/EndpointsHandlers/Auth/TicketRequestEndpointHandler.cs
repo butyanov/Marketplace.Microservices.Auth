@@ -1,6 +1,8 @@
 ﻿using Auth.API.Data.Interfaces;
 using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos;
+using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Models;
 using Auth.API.Services.Interfaces;
@@ -9,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
-public class TicketRequestEndpointHandler : IEndpointHandler<TicketRequest, TicketResponse>
+public class TicketRequestEndpointHandler : IRequestResponseEndpointHandler<TicketRequest, TicketResponse>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IVerificationCodeGeneratorService _verificationCodeGeneratorService;

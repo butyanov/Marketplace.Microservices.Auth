@@ -1,12 +1,14 @@
 ﻿using Auth.API.Data.Interfaces;
 using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos;
+using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Exceptions;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
-public class LoginEndpointHandler : IEndpointHandler<AuthorizationRequest, AuthorizationResponse>
+public class LoginEndpointHandler : IRequestResponseEndpointHandler<AuthorizationRequest, AuthorizationResponse>
 {
     private readonly IDomainDbContext _dbContext;
     private readonly Services.AuthenticationService _authService;

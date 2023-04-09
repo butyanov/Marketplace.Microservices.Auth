@@ -1,4 +1,5 @@
 ﻿using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Endpoints.Extensions.ValidationFilter;
 using Auth.API.EndpointsHandlers.Auth;
 
@@ -10,22 +11,26 @@ public class AuthEndpoints : IEndpoints
     {
         endpoints.MapPost("/token-refresh",
             async (RefreshTokenRequest request, RefreshTokenEndpointHandler handler) =>
-                Results.Ok(await handler.Handle(request)));
+                await handler.Handle(request)).AddValidation(c => c.AddFor<RefreshTokenRequest>());
         
         endpoints.MapPost("/login", async (AuthorizationRequest request, LoginEndpointHandler handler) => 
-            Results.Ok(await handler.Handle(request))).AddValidation(c => c.AddFor<AuthorizationRequest>());
+            await handler.Handle(request)).AddValidation(c => c.AddFor<AuthorizationRequest>());
         
         endpoints.MapPost("/signup", async (SignupRequest request, SignupEndpointHandler handler) =>
-            Results.Ok(await handler.Handle(request))).AddValidation(c => c.AddFor<SignupRequest>());
+            await handler.Handle(request)).AddValidation(c => c.AddFor<SignupRequest>());
         
         endpoints.MapPost("/init-phone-auth",
             async (PhoneLoginOrRegisterTicketRequest request, LoginOrRegisterTicketEndpointHandler handler) =>
-                Results.Ok(await handler.Handle(PhoneLoginOrRegisterTicketRequest.FromTicketRequest(request))))
+                await handler.Handle(PhoneLoginOrRegisterTicketRequest.FromTicketRequest(request)))
             .AddValidation(c => c.AddFor<PhoneLoginOrRegisterTicketRequest>());
         
         endpoints.MapPost("/init-email-auth",
             async (EmailLoginOrRegisterTicketRequest request, LoginOrRegisterTicketEndpointHandler handler) =>
-                Results.Ok(await handler.Handle(EmailLoginOrRegisterTicketRequest.FromTicketRequest(request))))
+                await handler.Handle(EmailLoginOrRegisterTicketRequest.FromTicketRequest(request)))
             .AddValidation(c => c.AddFor<EmailLoginOrRegisterTicketRequest>());
+        
+        endpoints.MapPost("/verify-auth-ticket",
+            async (AcquireTicketRequest request, AcquireTicketEndpointHandler handler) =>
+                await handler.Handle(request));
     }
 }

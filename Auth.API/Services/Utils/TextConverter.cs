@@ -71,7 +71,8 @@ public class TextConverter
         {'Ь', "J"},
         {'Э', "E"},
         {'Ю', "Yu"},
-        {'Я', "Ya"}
+        {'Я', "Ya"},
+        {' ', string.Empty}
     };
 
     public static string ConvertToLatin(string source)

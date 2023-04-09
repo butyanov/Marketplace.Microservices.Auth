@@ -15,11 +15,12 @@ var services = builder.Services;
 
 services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AuthDbContext>();
-services.AddDbContext<IDomainDbContext,AuthDbContext>(options =>
+services.AddDbContext<IDomainDbContext, AuthDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 services.AddCustomEntitiesConfiguration();
 
 services
+    .AddHttpContextAccessor()
     .AddCustomServicesConfiguration()
     .AddRedisConfiguration(builder.Configuration)
     .AddCustomSwaggerConfiguration(builder.Configuration)
@@ -34,6 +35,7 @@ var app = builder.Build();
 
 app.UseCustomMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
+app.UseCustomMiddleware<DbTransactionsMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

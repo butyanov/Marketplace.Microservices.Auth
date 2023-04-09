@@ -1,7 +1,10 @@
 ﻿using Auth.API.Data.Interfaces;
 using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos;
+using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.Dto.SupportTypes;
+using Auth.API.Dto.SupportTypes.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Exceptions;
 using Auth.API.Services.Interfaces;
@@ -9,7 +12,7 @@ using Auth.API.Services.SupportTypes;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
-public class AcquireTicketEndpointHandler : IEndpointHandler<AcquireTicketRequest, AcquireTicketResponse>
+public class AcquireTicketEndpointHandler : IRequestResponseEndpointHandler<AcquireTicketRequest, AcquireTicketResponse>
 {
     private readonly IRedisStore<PersistedTicketRequest> _redisStore;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;

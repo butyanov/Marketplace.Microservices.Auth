@@ -35,9 +35,10 @@
 
     <ItemGroup>
       <Folder Include="Dto" />
-      <Folder Include="Endpoints\Users" />
+      <Folder Include="Dto\SupportTypes\Users\" />
       <Folder Include="Migrations" />
-      <Folder Include="Repositories" />
+      <Folder Include="Validators\Me\" />
+      <Folder Include="Validators\Users\" />
     </ItemGroup>
 
 </Project>

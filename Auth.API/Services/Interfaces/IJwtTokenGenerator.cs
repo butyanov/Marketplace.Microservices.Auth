@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using Auth.API.Models;
-using Auth.API.Models.SupportTypes;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Auth.API.Services.Interfaces;
