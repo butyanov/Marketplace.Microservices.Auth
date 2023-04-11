@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Auth.API.Data;
+﻿using Auth.API.Data;
 using Auth.API.Data.Extensions;
 using Auth.API.Dto.RequestDtos.User;
 using Auth.API.EndpointsHandlers.Interfaces;
@@ -11,36 +10,25 @@ using Auth.API.Services.Utils;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 
-namespace Auth.API.EndpointsHandlers.Me;
+namespace Auth.API.EndpointsHandlers.Users;
 
-public class MeUpdateEndpointHandler : IRequestEndpointHandler<UserUpdateRequest>
+public class UsersUpdateEndpointHandler : IRequestEndpointHandler<UserAdvancedUpdateRequest>
 {
-    private readonly string _token;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly AuthDbContext _dbContext;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
 
-    public MeUpdateEndpointHandler(IHttpContextAccessor httpContextAccessor, IJwtTokenGenerator jwtTokenGenerator, AuthDbContext dbContext, IMapper mapper, UserManager<ApplicationUser> userManager)
+    public UsersUpdateEndpointHandler(AuthDbContext dbContext, IMapper mapper, UserManager<ApplicationUser> userManager)
     {
-        _jwtTokenGenerator = jwtTokenGenerator;
         _dbContext = dbContext;
         _userManager = userManager;
         _mapper = mapper;
-        _token = httpContextAccessor.HttpContext!.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
     }
 
-    public async Task Handle(UserUpdateRequest request)
+    public async Task Handle(UserAdvancedUpdateRequest request)
     {
-        var userId =
-            Guid.Parse(
-                _jwtTokenGenerator.ReadToken(_token)
-                    .FindFirst(x => x.Type == ClaimTypes.NameIdentifier)
-                    ?.Value
-                ?? throw new UnauthorizedException("INVALID_TOKEN"));
-        
-        var updatedDomainUser = _mapper.Map<UserUpdateRequest, DomainUser>(request);
-        var currentDomainUser = await _dbContext.MarketUsers.FirstOrNotFoundAsync(u => u.Id == userId);
+        var updatedDomainUser = _mapper.Map<UserAdvancedUpdateRequest, DomainUser>(request);
+        var currentDomainUser = await _dbContext.MarketUsers.FirstOrNotFoundAsync(u => u.Id == request.Id);
         _dbContext.UpdateEntity(currentDomainUser, updatedDomainUser);
 
         var currentIdentityUser = await _userManager.FindByIdAsync(currentDomainUser.IdentityUserId.ToString()) 
@@ -48,6 +36,14 @@ public class MeUpdateEndpointHandler : IRequestEndpointHandler<UserUpdateRequest
         currentIdentityUser.UserName =
             $"{TextConverter.ConvertToLatin(currentDomainUser.Name)}{new Random().Next(10000, 99999)}";
         currentIdentityUser.NormalizedUserName = currentIdentityUser.UserName.ToUpperInvariant();
+        if (request.Email != null)
+        {
+            currentIdentityUser.Email = request.Email;
+            currentIdentityUser.NormalizedEmail = request.Email.ToUpperInvariant();
+        }
+        if (request.PhoneNumber != null)
+            currentIdentityUser.PhoneNumber = request.PhoneNumber;
+        
             
         await _userManager.UpdateAsync(currentIdentityUser);
         await _dbContext.SaveEntitiesAsync();

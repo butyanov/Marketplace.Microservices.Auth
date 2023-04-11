@@ -5,6 +5,7 @@ using Auth.API.Dto.ResponseDtos;
 using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Exceptions;
+using Azure.Core;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
@@ -25,12 +26,13 @@ public class LoginEndpointHandler : IRequestResponseEndpointHandler<Authorizatio
                 request.LoginMode switch
                 {
                     LoginMode.Phone => _authService.ProcessTicketLogin(
-                        request.PhoneTicket
-                        ?? throw new ValidationFailedException(nameof(request.PhoneTicket), "TICKET_IS_NULL")),
+                        request.Ticket
+                        ?? throw new ValidationFailedException(nameof(request.Ticket), "TICKET_IS_NULL")),
 
                     LoginMode.Password => _authService.ProcessPasswordLogin(
-                        request.Email
-                        ?? throw new ValidationFailedException(nameof(request.Email), "EMAIL_IS_NULL"),
+                        request.LoginType,
+                        request.Login 
+                        ?? throw new ValidationFailedException(nameof(request.Login), "LOGIN_IS_NULL"),
                         request.Password
                         ?? throw new ValidationFailedException(nameof(request.Password), "PASSWORD_IS_NULL"))
                 }));

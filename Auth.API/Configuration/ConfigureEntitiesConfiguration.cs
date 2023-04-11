@@ -9,6 +9,7 @@ public static class ConfigureEntitiesConfiguration
     public static IServiceCollection AddCustomEntitiesConfiguration(this IServiceCollection services) =>
         services
             .AddSingleton<DependencyInjectedEntityConfiguration, ApplicationUserConfiguration>()
-            .AddSingleton<DependencyInjectedEntityConfiguration, DomainUserConfiguration>();
+            .AddSingleton<DependencyInjectedEntityConfiguration, DomainUserConfiguration>()
+            .AddSingleton<DependencyInjectedEntityConfiguration, PermissionsModelConfiguration>();
     
 }

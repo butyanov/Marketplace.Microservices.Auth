@@ -13,19 +13,24 @@ public class AuthEndpoints : IEndpoints
             async (RefreshTokenRequest request, RefreshTokenEndpointHandler handler) =>
                 await handler.Handle(request)).AddValidation(c => c.AddFor<RefreshTokenRequest>());
         
-        endpoints.MapPost("/login", async (AuthorizationRequest request, LoginEndpointHandler handler) => 
-            await handler.Handle(request)).AddValidation(c => c.AddFor<AuthorizationRequest>());
+        endpoints.MapPost("/email-login", async (AuthorizationRequest request, LoginEndpointHandler handler) => 
+            await handler.Handle(EmailAuthorizationRequest.FromAuthorizationRequest(request)))
+            .AddValidation(c => c.AddFor<EmailAuthorizationRequest>());
+        
+        endpoints.MapPost("/phone-login", async (AuthorizationRequest request, LoginEndpointHandler handler) => 
+            await handler.Handle(PhoneAuthorizationRequest.FromAuthorizationRequest(request)))
+            .AddValidation(c => c.AddFor<PhoneAuthorizationRequest>());
         
         endpoints.MapPost("/signup", async (SignupRequest request, SignupEndpointHandler handler) =>
             await handler.Handle(request)).AddValidation(c => c.AddFor<SignupRequest>());
         
         endpoints.MapPost("/init-phone-auth",
-            async (PhoneLoginOrRegisterTicketRequest request, LoginOrRegisterTicketEndpointHandler handler) =>
+            async (LoginOrRegisterTicketRequest request, LoginOrRegisterTicketEndpointHandler handler) =>
                 await handler.Handle(PhoneLoginOrRegisterTicketRequest.FromTicketRequest(request)))
             .AddValidation(c => c.AddFor<PhoneLoginOrRegisterTicketRequest>());
         
         endpoints.MapPost("/init-email-auth",
-            async (EmailLoginOrRegisterTicketRequest request, LoginOrRegisterTicketEndpointHandler handler) =>
+            async (LoginOrRegisterTicketRequest request, LoginOrRegisterTicketEndpointHandler handler) =>
                 await handler.Handle(EmailLoginOrRegisterTicketRequest.FromTicketRequest(request)))
             .AddValidation(c => c.AddFor<EmailLoginOrRegisterTicketRequest>());
         

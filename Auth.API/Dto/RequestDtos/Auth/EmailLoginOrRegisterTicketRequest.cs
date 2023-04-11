@@ -1,7 +1,6 @@
-﻿using Auth.API.Dto.RequestDtos.Auth;
-using Auth.API.Services.SupportTypes;
+﻿using Auth.API.Services.SupportTypes;
 
-namespace Auth.API.Dto.RequestDtos;
+namespace Auth.API.Dto.RequestDtos.Auth;
 
 public record EmailLoginOrRegisterTicketRequest
     (string Credentials, TicketTypes Type = TicketTypes.Email) : LoginOrRegisterTicketRequest(Credentials, Type)

@@ -12,6 +12,7 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Gui
     private readonly IEnumerable<DependencyInjectedEntityConfiguration> _configurations;
     public DbSet<ApplicationUser> IdentityUsers { get; set; }
     public DbSet<DomainUser> MarketUsers { get; set; }
+    public DbSet<PermissionsModel> Permissions { get; set; }
     
     public AuthDbContext(
         DbContextOptions<AuthDbContext> options, IEnumerable<DependencyInjectedEntityConfiguration> configurations

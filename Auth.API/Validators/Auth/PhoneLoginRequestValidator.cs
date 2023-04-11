@@ -3,11 +3,11 @@ using FluentValidation;
 
 namespace Auth.API.Validators.Auth;
 
-public class PhoneLoginOrRegisterTicketRequestValidator : AbstractValidator<PhoneLoginOrRegisterTicketRequest>
+public class PhoneLoginRequestValidator : AbstractValidator<PhoneAuthorizationRequest>
 {
-    public PhoneLoginOrRegisterTicketRequestValidator()
+    public PhoneLoginRequestValidator()
     {
-        RuleFor(x => x.Credentials)
+        RuleFor(x => x.Login)
             .MinimumLength(11)
             .WithMessage(ValidationMessages.TooShortPhone)
             .MaximumLength(19)

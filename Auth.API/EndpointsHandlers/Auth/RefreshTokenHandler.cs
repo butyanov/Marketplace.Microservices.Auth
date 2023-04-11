@@ -52,7 +52,7 @@ public class RefreshTokenEndpointHandler : IRequestResponseEndpointHandler<Refre
 
         applicationUser.RemoveRefreshToken(token);
         
-        var result = _authService.AuthenticateUser(applicationUser, user);
+        var result = await _authService.AuthenticateUser(applicationUser, user);
 
         await _context.SaveEntitiesAsync();
         

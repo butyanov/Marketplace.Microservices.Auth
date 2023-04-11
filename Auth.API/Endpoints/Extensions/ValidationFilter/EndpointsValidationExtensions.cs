@@ -51,7 +51,7 @@ public static class EndpointsValidationExtensions
                 var args = factoryContext.MethodInfo.GetParameters();
 
                 var missingArgs = toValidate
-                    .Where(type => args.All(x => x.ParameterType != type))
+                    .Where(type => args.All(x => x.ParameterType != type && !x.ParameterType.IsAssignableFrom(type)))
                     .ToList();
 
                 if (missingArgs.Count > 0)

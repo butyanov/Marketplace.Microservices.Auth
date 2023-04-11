@@ -90,7 +90,7 @@ public class ExceptionHandlingMiddleware
             await WriteDomainError(context, ex);
             return;
         }
-        
+
         var response = new ProblemDetails
         {
             Title = errorText,
@@ -145,7 +145,7 @@ public class ExceptionHandlingMiddleware
     {
         var errorText = exception.Message;
         var logLevel = LogLevel.Error;
-        var responseCode = HttpStatusCode.InternalServerError;
+        var responseCode = HttpStatusCode.Unauthorized;
         await LogAndReturnAsync(context, exception, errorText, responseCode, logLevel);
     }
 }

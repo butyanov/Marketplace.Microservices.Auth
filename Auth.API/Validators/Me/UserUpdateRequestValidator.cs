@@ -1,15 +1,13 @@
-﻿using Auth.API.Dto.RequestDtos.Auth;
+﻿using Auth.API.Dto.RequestDtos.User;
 using FluentValidation;
 
-namespace Auth.API.Validators.Auth;
+namespace Auth.API.Validators.Me;
 
-public class SignUpRequestValidator : AbstractValidator<SignupRequest>
+public class UserUpdateRequestValidator : AbstractValidator<UserUpdateRequest>
 {
-    public SignUpRequestValidator()
+    public UserUpdateRequestValidator()
     {
         RuleFor(x => x.Name)
-            .NotEmpty()
-            .WithMessage(ValidationMessages.EmptyName)
             .MinimumLength(6)
             .WithMessage(ValidationMessages.TooShortName)
             .MaximumLength(50)
@@ -17,7 +15,5 @@ public class SignUpRequestValidator : AbstractValidator<SignupRequest>
             // не работает с ё
             .Matches(@"^[a-zA-Zа-яА-Я]+(\s[a-zA-Zа-яА-Я]+)*$")
             .WithMessage(ValidationMessages.NameContainsWrongSymbols);
-       
-     
     }
 }

@@ -37,8 +37,6 @@
       <Folder Include="Dto" />
       <Folder Include="Dto\SupportTypes\Users\" />
       <Folder Include="Migrations" />
-      <Folder Include="Validators\Me\" />
-      <Folder Include="Validators\Users\" />
     </ItemGroup>
 
 </Project>

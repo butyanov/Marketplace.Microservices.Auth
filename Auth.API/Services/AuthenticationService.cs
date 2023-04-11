@@ -1,6 +1,9 @@
-﻿using Auth.API.Data.Interfaces;
+﻿using Auth.API.Data;
+using Auth.API.Data.Interfaces;
+using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.SupportTypes.Auth;
 using Auth.API.Exceptions;
+using Auth.API.InfrastructureExtensions;
 using Auth.API.Models;
 using Auth.API.Services.Extensions;
 using Auth.API.Services.Interfaces;
@@ -12,13 +15,12 @@ namespace Auth.API.Services;
 
 public class AuthenticationService
 {
-    private readonly IDomainDbContext _dbContext;
+    private readonly AuthDbContext _dbContext;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
-
-
-    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IDomainDbContext dbContext)
+    
+    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, AuthDbContext dbContext)
     {
         _dbContext = dbContext;
         _jwtTokenGenerator = jwtTokenGenerator;
@@ -27,10 +29,18 @@ public class AuthenticationService
 
     }
 
-    public AuthenticationResult AuthenticateUser(ApplicationUser identityUser, DomainUser domainUser)
+    public async Task<AuthenticationResult> AuthenticateUser(ApplicationUser identityUser, DomainUser domainUser)
     {
         var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
-        var token = _jwtTokenGenerator.GenerateUserToken(domainUser,
+        
+        var access = await _dbContext.Permissions.FirstOrDefaultAsync(p => p.Id == domainUser.Id);
+        if (access == null)
+        {
+            access = new PermissionsModel(domainUser.Id, UserPermissionsPresets.User);
+            await _dbContext.Permissions.AddAsync(access);
+        }
+        
+        var token = _jwtTokenGenerator.GenerateUserToken(domainUser, access,
             DateTime.UtcNow.AddSeconds(AuthConfig.TokenLifetime));
 
         identityUser.AddRefreshToken(refreshToken);
@@ -38,10 +48,16 @@ public class AuthenticationService
         return new AuthenticationResult(token, refreshToken);
     }
     
-    public async Task<AuthenticationResult> ProcessPasswordLogin(string email, string password)
+    public async Task<AuthenticationResult> ProcessPasswordLogin(LoginType loginType, string login, string password)
     {
-        var identityUser = await _userManager.FindByEmailAsync(email)
-                           ?? throw new NotFoundException<ApplicationUser>();
+        var identityUser = loginType switch
+        {
+            LoginType.Email =>
+                await _userManager.FindByEmailAsync(login)
+                ?? throw new NotFoundException<ApplicationUser>(),
+            LoginType.Phone =>
+                await _dbContext.Users.FirstOrNotFoundAsync(u => u.PhoneNumber == login)
+        };
         
         var domainUser = await _dbContext.MarketUsers.FirstOrDefaultAsync(x => x.IdentityUserId == identityUser.Id)
                          ?? throw new NotFoundException<DomainUser>();
@@ -51,7 +67,7 @@ public class AuthenticationService
         if (!result.Succeeded)
             throw new UnauthorizedException("PASSWORD_INVALID");
 
-        return AuthenticateUser(identityUser, domainUser);
+        return await AuthenticateUser(identityUser, domainUser);
     }
     
     public async Task<AuthenticationResult> ProcessTicketLogin(string ticket)
@@ -74,6 +90,6 @@ public class AuthenticationService
         var domainUser = await _dbContext.MarketUsers.FirstOrDefaultAsync(x => x.IdentityUserId == user.Id)
                          ?? throw new NotFoundException<DomainUser>();
 
-        return AuthenticateUser(user, domainUser);
+        return await AuthenticateUser(user, domainUser);
     }
 }

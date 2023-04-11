@@ -1,4 +1,5 @@
 ﻿using Auth.API.Dto.RequestDtos;
+using Auth.API.Dto.RequestDtos.Auth;
 using FluentValidation;
 
 namespace Auth.API.Validators.Auth;
@@ -9,6 +10,6 @@ public class EmailLoginOrRegisterTicketRequestValidator : AbstractValidator<Emai
     {
         RuleFor(x => x.Credentials)
            .EmailAddress()
-           .WithMessage(AuthValidationMessages.IncorrectEmail);
+           .WithMessage(ValidationMessages.IncorrectEmail);
     }   
 }

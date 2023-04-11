@@ -130,6 +130,19 @@ namespace Auth.API.Migrations
                     b.ToTable("MarketUsers");
                 });
 
+            modelBuilder.Entity("Auth.API.Models.PermissionsModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("Permissions")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
@@ -258,6 +271,21 @@ namespace Auth.API.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Auth.API.Models.PermissionsModel", b =>
+                {
+                    b.HasOne("Auth.API.Models.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("Auth.API.Models.PermissionsModel", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Auth.API.Models.DomainUser", null)
+                        .WithOne()
+                        .HasForeignKey("Auth.API.Models.PermissionsModel", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

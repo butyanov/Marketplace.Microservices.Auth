@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Auth.API.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20230404203458_Marketplace.Auth_Init")]
-    partial class MarketplaceAuth_Init
+    [Migration("20230410222630_Marketplace_Init")]
+    partial class Marketplace_Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,6 +131,19 @@ namespace Auth.API.Migrations
                         .IsUnique();
 
                     b.ToTable("MarketUsers");
+                });
+
+            modelBuilder.Entity("Auth.API.Models.PermissionsModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("Permissions")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -261,6 +274,21 @@ namespace Auth.API.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Auth.API.Models.PermissionsModel", b =>
+                {
+                    b.HasOne("Auth.API.Models.ApplicationUser", null)
+                        .WithOne()
+                        .HasForeignKey("Auth.API.Models.PermissionsModel", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Auth.API.Models.DomainUser", null)
+                        .WithOne()
+                        .HasForeignKey("Auth.API.Models.PermissionsModel", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -14,8 +14,8 @@ public class MappingProfile : Profile
         CreateMap<ApplicationUser, DomainUser>();
         CreateMap<ApplicationUser, DomainUser>().ReverseMap();
         CreateMap<DomainUser, UserResponse>();
-        CreateMap<DomainUser, UserAdvancedResponse>();
         CreateMap<UserUpdateRequest, DomainUser>();
         CreateMap<UserAdvancedUpdateRequest, DomainUser>();
+        CreateMap<UserCreateRequest, DomainUser>();
     }
 }

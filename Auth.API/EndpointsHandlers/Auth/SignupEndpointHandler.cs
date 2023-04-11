@@ -1,4 +1,5 @@
-﻿using Auth.API.Data.Interfaces;
+﻿using Auth.API.Data;
+using Auth.API.Data.Interfaces;
 using Auth.API.Dto.RequestDtos;
 using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos;
@@ -15,18 +16,19 @@ using Auth.API.Services.SupportTypes;
 using Auth.API.Services.Utils;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using UserPermissions = Auth.API.Services.SupportTypes.UserPermissions;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 
 public class SignupEndpointHandler : IRequestResponseEndpointHandler<SignupRequest, AuthorizationResponse>
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IDomainDbContext _dbContext;
+    private readonly AuthDbContext _dbContext;
     private readonly AuthenticationService _authService;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IMapper _mapper;
     
-    public SignupEndpointHandler(UserManager<ApplicationUser> userManager, AuthenticationService authService, IMapper mapper, IDomainDbContext dbContext, IJwtTokenGenerator jwtTokenGenerator)
+    public SignupEndpointHandler(UserManager<ApplicationUser> userManager, AuthenticationService authService, IMapper mapper, AuthDbContext dbContext, IJwtTokenGenerator jwtTokenGenerator)
     {
         _userManager = userManager;
         _authService = authService;
@@ -56,7 +58,8 @@ public class SignupEndpointHandler : IRequestResponseEndpointHandler<SignupReque
         }
         
         var (identity, domainUser) = await CreateUser(request, ticket);
-        var tokens = _authService.AuthenticateUser(identity, domainUser);
+        var tokens = await _authService.AuthenticateUser(identity, domainUser);
+       
         await _dbContext.SaveEntitiesAsync();
         return AuthorizationResponse.FromAuthenticationResult(tokens);
     }

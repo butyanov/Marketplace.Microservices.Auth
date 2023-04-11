@@ -1,7 +1,7 @@
 ﻿namespace Auth.API.Services.SupportTypes;
 
 [Flags]
-public enum UserPermissions : byte
+public enum UserPermissions : uint
 {
     Read = 1,
     Edit = 2,

@@ -6,7 +6,6 @@ using Auth.API.InfrastructureExtensions;
 using Auth.API.Models;
 using Auth.API.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.EndpointsHandlers.Me;
 

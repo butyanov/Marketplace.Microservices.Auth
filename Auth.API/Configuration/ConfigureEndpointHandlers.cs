@@ -5,6 +5,7 @@ using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.EndpointsHandlers.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.EndpointsHandlers.Me;
+using Auth.API.EndpointsHandlers.Users;
 
 namespace Auth.API.Configuration;
 
@@ -21,5 +22,11 @@ public static class ConfigureEndpointHandlers
             .AddScoped<AcquireTicketEndpointHandler>()
             .AddScoped<MeGetEndpointHandler>()
             .AddScoped<MeUpdateEndpointHandler>()
-            .AddScoped<MeDeleteEndpointHandler>();
+            .AddScoped<MeDeleteEndpointHandler>()
+            .AddScoped<UsersCreateEndpointHandler>()
+            .AddScoped<UsersUpdateEndpointHandler>()
+            .AddScoped<UsersDeleteEndpointHandler>()
+            .AddScoped<UsersGetAllEndpointHandler>()
+            .AddScoped<UsersGetEndpointHandler>()
+            .AddScoped<UsersPromoteEndpointHandler>();
 }

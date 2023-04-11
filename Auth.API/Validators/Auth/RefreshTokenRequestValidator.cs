@@ -9,10 +9,10 @@ public class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenReques
     {
         RuleFor(x => x.Token)
             .NotEmpty()
-            .WithMessage(AuthValidationMessages.EmptyBearerToken);
+            .WithMessage(ValidationMessages.EmptyBearerToken);
         
         RuleFor(x => x.RefreshToken)
             .NotEmpty()
-            .WithMessage(AuthValidationMessages.EmptyRefreshToken);
+            .WithMessage(ValidationMessages.EmptyRefreshToken);
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace Auth.API.Validators.Auth;
+﻿namespace Auth.API.Validators;
 
-public static class AuthValidationMessages
+public static class ValidationMessages
 {
     public const string EmptyName = "Name field cannot be empty";
     public const string TooShortName = "Name is too short";
