@@ -1,5 +1,6 @@
 ﻿using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.RequestDtos.User;
+using Auth.API.Dto.ResponseDtos.Auth.External;
 using Auth.API.Dto.ResponseDtos.User;
 using AutoMapper;
 
@@ -17,5 +18,6 @@ public class MappingProfile : Profile
         CreateMap<UserUpdateRequest, DomainUser>();
         CreateMap<UserAdvancedUpdateRequest, DomainUser>();
         CreateMap<UserCreateRequest, DomainUser>();
+        CreateMap<GoogleGetUserInfoResponse, ApplicationUser>();
     }
 }

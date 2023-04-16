@@ -11,7 +11,7 @@ public class UserPermissionsRequirementHandler : AuthorizationHandler<UserPermis
     {
         if (!context.User.Identity!.IsAuthenticated)
             throw new UnauthorizedException("UNAUTHENTICATED_USER");
-       
+        
         if(!IsPermitted(requirement.Permissions, (UserPermissions) uint.Parse(context.User.Claims.First(c => c.Type == "Permissions").Value)))
             throw new UnauthorizedAccessException();
         
@@ -20,5 +20,4 @@ public class UserPermissionsRequirementHandler : AuthorizationHandler<UserPermis
 
     private bool IsPermitted(UserPermissions requiredPermissions, UserPermissions userPermissions) =>
         (requiredPermissions & userPermissions) == requiredPermissions;
-    
 }

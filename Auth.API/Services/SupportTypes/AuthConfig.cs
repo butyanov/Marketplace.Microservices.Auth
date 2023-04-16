@@ -13,4 +13,6 @@ public static class AuthConfig
     public static readonly int TicketRequestLifetime = 5 * 60;
 
     public static readonly int TicketCooldown = 2 * 60;
+
+    public static readonly string GoogleAuthStateVal = "gmfGFKMKdkklgnldkfwe";
 }

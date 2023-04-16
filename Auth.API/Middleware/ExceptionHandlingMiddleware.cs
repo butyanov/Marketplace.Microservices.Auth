@@ -114,7 +114,6 @@ public class ExceptionHandlingMiddleware
 
     private Task WriteDomainError(HttpContext context, DomainException exception)
     {
-        context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)exception.StatusCode;
 
         var problem = exception.ToProblemDetails();

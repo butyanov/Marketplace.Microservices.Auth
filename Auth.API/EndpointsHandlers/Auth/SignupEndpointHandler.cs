@@ -1,10 +1,6 @@
 ﻿using Auth.API.Data;
-using Auth.API.Data.Interfaces;
-using Auth.API.Dto.RequestDtos;
 using Auth.API.Dto.RequestDtos.Auth;
-using Auth.API.Dto.ResponseDtos;
 using Auth.API.Dto.ResponseDtos.Auth;
-using Auth.API.Dto.SupportTypes;
 using Auth.API.Dto.SupportTypes.Auth;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Exceptions;
@@ -16,7 +12,6 @@ using Auth.API.Services.SupportTypes;
 using Auth.API.Services.Utils;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using UserPermissions = Auth.API.Services.SupportTypes.UserPermissions;
 
 namespace Auth.API.EndpointsHandlers.Auth;
 

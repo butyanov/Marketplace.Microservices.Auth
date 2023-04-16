@@ -1,5 +1,4 @@
-﻿using Auth.API.Dto.RequestDtos;
-using Auth.API.Dto.RequestDtos.Auth;
+﻿using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Endpoints.Extensions.ValidationFilter;
 using Auth.API.EndpointsHandlers.Auth;
 
@@ -37,5 +36,11 @@ public class AuthEndpoints : IEndpoints
         endpoints.MapPost("/verify-auth-ticket",
             async (AcquireTicketRequest request, AcquireTicketEndpointHandler handler) =>
                 await handler.Handle(request));
+
+        endpoints.MapGet("/google-code-token", async (string code, GoogleExchangeCodeOnTokenEndpointHandler handler) =>
+            await handler.Handle(code));
+
+        endpoints.MapGet("/google-token-auth", async (string token, GoogleUserAuthenticationEndpointHandler handler) =>
+            await handler.Handle(token));
     }
 }

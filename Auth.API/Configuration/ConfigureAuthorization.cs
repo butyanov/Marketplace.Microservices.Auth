@@ -8,7 +8,7 @@ public static class ConfigureAuthorization
 {
     public static IServiceCollection AddCustomAuthorization(this IServiceCollection services) =>
         services
-            .AddSingleton<IAuthorizationHandler, UserPermissionsRequirementHandler>()
+            .AddTransient<IAuthorizationHandler, UserPermissionsRequirementHandler>()
             .AddAuthorization(o =>
             {
                 o.AddPolicy("User",

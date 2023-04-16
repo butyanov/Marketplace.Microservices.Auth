@@ -48,7 +48,7 @@ public class AuthenticationService
         return new AuthenticationResult(token, refreshToken);
     }
     
-    public async Task<AuthenticationResult> ProcessPasswordLogin(LoginType loginType, string login, string password)
+    public async Task<AuthenticationResult> ProcessPasswordLogin(LoginType loginType, string login, string password, bool passwordRequired = true)
     {
         var identityUser = loginType switch
         {
@@ -61,11 +61,14 @@ public class AuthenticationService
         
         var domainUser = await _dbContext.MarketUsers.FirstOrDefaultAsync(x => x.IdentityUserId == identityUser.Id)
                          ?? throw new NotFoundException<DomainUser>();
-        
-        var result = await _signInManager.CheckPasswordSignInAsync(identityUser, password, false);
 
-        if (!result.Succeeded)
-            throw new UnauthorizedException("PASSWORD_INVALID");
+        if (passwordRequired)
+        {
+            var result = await _signInManager.CheckPasswordSignInAsync(identityUser, password, false);
+        
+            if (!result.Succeeded)
+                throw new UnauthorizedException("PASSWORD_INVALID");
+        }
 
         return await AuthenticateUser(identityUser, domainUser);
     }
