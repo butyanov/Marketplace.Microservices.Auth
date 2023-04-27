@@ -48,7 +48,7 @@ public class AuthenticationService
         return new AuthenticationResult(token, refreshToken);
     }
     
-    public async Task<AuthenticationResult> ProcessPasswordLogin(LoginType loginType, string login, string password, bool passwordRequired = true)
+    public async Task<AuthenticationResult> ProcessPasswordLogin(LoginType loginType, string login, string password)
     {
         var identityUser = loginType switch
         {
@@ -61,18 +61,16 @@ public class AuthenticationService
         
         var domainUser = await _dbContext.MarketUsers.FirstOrDefaultAsync(x => x.IdentityUserId == identityUser.Id)
                          ?? throw new NotFoundException<DomainUser>();
-
-        if (passwordRequired)
-        {
-            var result = await _signInManager.CheckPasswordSignInAsync(identityUser, password, false);
         
-            if (!result.Succeeded)
-                throw new UnauthorizedException("PASSWORD_INVALID");
-        }
+        var result = await _signInManager.CheckPasswordSignInAsync(identityUser, password, false);
+        
+        if (!result.Succeeded)
+            throw new UnauthorizedException("PASSWORD_INVALID");
+        
 
         return await AuthenticateUser(identityUser, domainUser);
     }
-    
+
     public async Task<AuthenticationResult> ProcessTicketLogin(string ticket)
     {
         var ticketInfo = _jwtTokenGenerator.ReadPhoneTicketRequest(ticket)
@@ -94,5 +92,22 @@ public class AuthenticationService
                          ?? throw new NotFoundException<DomainUser>();
 
         return await AuthenticateUser(user, domainUser);
+    }
+    
+    public async Task<AuthenticationResult> ProcessExternalLogin(LoginType loginType, string login)
+    {
+        var identityUser = loginType switch
+        {
+            LoginType.Email =>
+                await _userManager.FindByEmailAsync(login)
+                ?? throw new NotFoundException<ApplicationUser>(),
+            LoginType.Phone =>
+                await _dbContext.Users.FirstOrNotFoundAsync(u => u.PhoneNumber == login)
+        };
+        
+        var domainUser = await _dbContext.MarketUsers.FirstOrDefaultAsync(x => x.IdentityUserId == identityUser.Id)
+                         ?? throw new NotFoundException<DomainUser>();
+        
+        return await AuthenticateUser(identityUser, domainUser);
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using Auth.API.Data;
-using Auth.API.Dto.RequestDtos.Auth;
 using Auth.API.Dto.ResponseDtos.Auth;
 using Auth.API.Dto.ResponseDtos.Auth.External;
 using Auth.API.EndpointsHandlers.Interfaces;
 using Auth.API.Exceptions;
+using Auth.API.InfrastructureExtensions;
 using Auth.API.Models;
 using Auth.API.Services;
-using Auth.API.Services.SupportTypes;
 using Auth.API.Services.Utils;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 
@@ -54,10 +54,22 @@ public class GoogleUserAuthenticationEndpointHandler : IRequestResponseEndpointH
         }
         
         if (googleUser.Email == null || !googleUser.VerifiedEmail)
-            throw new UnauthorizedException("INVALID_CREDENTIALS");
+            throw new UnauthorizedException("UNVERIFIED_CREDENTIALS");
+
+        (ApplicationUser identity, DomainUser domainUser) userDataTuple;
         
-        var (identity, domainUser) = await CreateUserFromGoogleEntity(googleUser);
-        var tokens = await _authService.AuthenticateUser(identity, domainUser);
+        var existingIdentity = await _userManager.FindByEmailAsync(googleUser.Email);
+
+        if (existingIdentity is not null)
+        {
+            var domainEntity =
+                await _dbContext.MarketUsers.FirstOrNotFoundAsync(u => u.IdentityUserId == existingIdentity.Id);
+            userDataTuple = (existingIdentity, domainEntity);
+        }
+        else
+            userDataTuple = await CreateUserFromGoogleEntity(googleUser);
+        
+        var tokens = await _authService.AuthenticateUser(userDataTuple.identity, userDataTuple.domainUser);
        
         await _dbContext.SaveEntitiesAsync();
         return AuthorizationResponse.FromAuthenticationResult(tokens);
