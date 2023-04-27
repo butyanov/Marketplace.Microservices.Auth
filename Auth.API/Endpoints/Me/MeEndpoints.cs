@@ -10,8 +10,10 @@ public class MeEndpoints : IEndpoints
     {
         endpoints.MapGet("/get", async (MeGetEndpointHandler handler) => 
             await handler.Handle()).RequireAuthorization("User");
+        
         endpoints.MapPatch("/update", async (UserUpdateRequest request, MeUpdateEndpointHandler handler) => 
             await handler.Handle(request)).RequireAuthorization("User").AddValidation(c => c.AddFor<UserUpdateRequest>());
+        
         endpoints.MapDelete("/delete", async (MeDeleteEndpointHandler handler) => 
             await handler.Handle()).RequireAuthorization("User");
     }

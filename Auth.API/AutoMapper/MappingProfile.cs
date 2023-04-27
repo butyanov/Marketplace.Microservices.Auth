@@ -2,9 +2,10 @@
 using Auth.API.Dto.RequestDtos.User;
 using Auth.API.Dto.ResponseDtos.Auth.External;
 using Auth.API.Dto.ResponseDtos.User;
+using Auth.API.Models;
 using AutoMapper;
 
-namespace Auth.API.Models.TypesMapping;
+namespace Auth.API.AutoMapper;
 
 public class MappingProfile : Profile
 {

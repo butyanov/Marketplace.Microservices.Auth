@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgres:
+  postgres-auth:
     image: postgres
     volumes:
       - database:/var/lib/postgresql/data
@@ -10,9 +10,9 @@ services:
       - "5432:5432"
     environment:
       LC_ALL: C.UTF-8
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "postgresAuth"
+      POSTGRES_USER: "postgresAuth"
+      POSTGRES_PASSWORD: "postgresAuth"
     restart: always
   redis-data:
     image: redis:alpine
